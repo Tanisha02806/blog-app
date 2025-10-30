@@ -1,99 +1,37 @@
+{
+    "_id": "6902235013c17ba2091202cf",
+    "name": "Tanisha",
+    "email": "tanisha@example.com",
+    "role": "user",
+    "dateJoined": "2025-10-29T14:23:12.364Z",
+    "__v": 0
+}
 
-## 🧱 **BLOG APP BACKEND DEVELOPMENT CHECKLIST**
+{
+    "title": "My First Blog",
+    "content": "This is my first blog post!",
+    "author": "6902235013c17ba2091202cf",
+    "tags": [],
+    "likedBy": [],
+    "_id": "6903acab79d9b63ab601d50d",
+    "slug": "my-first-blog",
+    "createdAt": "2025-10-30T18:21:31.614Z",
+    "updatedAt": "2025-10-30T18:21:31.614Z",
+    "__v": 0,
+    "likesCount": 0,
+    "id": "6903acab79d9b63ab601d50d"
+}
 
-### **🟩 STAGE 1 — Project Setup**
-
-| Task                                                                            | Status |
-| ------------------------------------------------------------------------------- | ------ |
-| Initialize `npm` project (`npm init -y`)                                        | ✅      |
-| Install dependencies (`express`, `mongoose`, `dotenv`, `cors`, `nodemon`, etc.) | ✅      |
-| Setup `package.json` scripts (`"dev": "nodemon server.js"`)                     | ✅      |
-| Create `server.js` and basic Express server                                     | ✅      |
-| Add `.env` file for secrets (MongoDB URL + JWT secret)                          | ✅      |
-| Load environment variables using `dotenv`                                       | ✅      |
-| Connect MongoDB with `mongoose`                                                 | ✅      |
-| Fix ES module/CommonJS compatibility issues                                     | ✅      |
-| Server running successfully on port 5000                                        | ✅      |
-
----
-
-### **🟨 STAGE 2 — Folder Structure & Routes**
-
-| Task                                                            | Status                     |
-| --------------------------------------------------------------- | -------------------------- |
-| Create `routes` folder                                          | ✅                          |
-| Setup base routes (`/api/users`, `/api/posts`, `/api/comments`) | ⚠️ *`comments.js` missing* |
-| Import routes into `server.js`                                  | ✅ (except comments route)  |
-| Test routes with Postman                                        | ⬜ Pending                  |
-
----
-
-### **🟨 STAGE 3 — Models (MongoDB Schemas)**
-
-| Task                       | Status    |
-| -------------------------- | --------- |
-| Create `models/User.js`    | ⬜ Pending |
-| Create `models/Post.js`    | ⬜ Pending |
-| Create `models/Comment.js` | ⬜ Pending |
-| Test schema connections    | ⬜ Pending |
-
----
-
-### **🟨 STAGE 4 — Controllers (Logic Layer)**
-
-| Task                                     | Status    |
-| ---------------------------------------- | --------- |
-| Setup `controllers/userController.js`    | ⬜ Pending |
-| Setup `controllers/postController.js`    | ⬜ Pending |
-| Setup `controllers/commentController.js` | ⬜ Pending |
-
----
-
-### **🟨 STAGE 5 — Authentication**
-
-| Task                                                  | Status    |
-| ----------------------------------------------------- | --------- |
-| Add `bcrypt` for password hashing                     | ⬜ Pending |
-| Add `jsonwebtoken` for JWT-based login                | ⬜ Pending |
-| Create register/login routes                          | ⬜ Pending |
-| Protect routes using middleware (`authMiddleware.js`) | ⬜ Pending |
-
----
-
-### **🟨 STAGE 6 — Blog CRUD Operations**
-
-| Task                       | Status    |
-| -------------------------- | --------- |
-| Create Post (Add new blog) | ⬜ Pending |
-| Get all posts              | ⬜ Pending |
-| Get single post            | ⬜ Pending |
-| Update post                | ⬜ Pending |
-| Delete post                | ⬜ Pending |
-| Add Comments functionality | ⬜ Pending |
-
----
-
-### **🟨 STAGE 7 — Deployment & Optimization**
-
-| Task                                             | Status    |
-| ------------------------------------------------ | --------- |
-| Setup environment for deployment (Render/Vercel) | ⬜ Pending |
-| Add production-ready MongoDB Atlas URI           | ⬜ Pending |
-| Test deployed API endpoints                      | ⬜ Pending |
-
----
-
-✅ **COMPLETED:**
-
-* Server setup
-* MongoDB connection
-* Environment setup
-* Nodemon & dotenv integration
-
-⚠️ **REMAINING:**
-
-* Add missing `routes/comments.js`
-* Create Models + Controllers
-* Implement Authentication (JWT, bcrypt)
-* CRUD for Posts & Comments
-* Deployment
+{
+    "message": "Comment added successfully",
+    "comment": {
+        "postId": "6903acab79d9b63ab601d50d",
+        "userId": "6902235013c17ba2091202cf",
+        "text": "Great blog post!",
+        "_id": "6903ad5430d6693b0dd0eee7",
+        "createdAt": "2025-10-30T18:24:20.985Z",
+        "updatedAt": "2025-10-30T18:24:20.985Z",
+        "__v": 0,
+        "id": "6903ad5430d6693b0dd0eee7"
+    }
+}

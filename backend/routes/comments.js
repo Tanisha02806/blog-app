@@ -1,44 +1,99 @@
 const express = require("express");
 const Comment = require("../models/Comment");
+const authMiddleware = require("../middleware/auth");
 
 const router = express.Router();
 
-// 🟢 Add a new comment
-router.post("/:postId", async (req, res) => {
+// ✅ Create comment for a specific post
+router.post("/:postId", authMiddleware, async (req, res) => {
   try {
-    console.log("Incoming comment request:", req.body);
+    const { text } = req.body;
+    const { postId } = req.params;
 
-    const { text, userId } = req.body;
-    let { postId } = req.params;
-
-    // Trim possible whitespace/newlines from postId
-    postId = postId.trim();
+    if (!text) {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
 
     const newComment = new Comment({
-      text,
-      userId,
       postId,
+      userId: req.user.id, // from JWT
+      text,
     });
 
-    const savedComment = await newComment.save();
-    res.status(201).json(savedComment);
-  } catch (err) {
-    console.error("🔥 Error adding comment:", err);
-    res.status(500).json({ message: err.message });
+    await newComment.save();
+    res.status(201).json({
+      message: "Comment added successfully",
+      comment: newComment,
+    });
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ message: "Error adding comment", error: error.message });
   }
 });
 
-// 🟢 Get all comments for a post
-router.get("/:postId", async (req, res) => {
+// ✅ Get comments for a post (with pagination)
+router.get("/:postId", async (req, res, next) => {
   try {
-    let { postId } = req.params;
-    postId = postId.trim();
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit, 10) || 10);
+    const skip = (page - 1) * limit;
 
-    const comments = await Comment.find({ postId }).populate("userId", "name");
-    res.status(200).json(comments);
+    const [comments, total] = await Promise.all([
+      Comment.find({ postId: req.params.postId })
+        .sort({ date: -1 }) // or createdAt if your schema uses timestamps
+        .skip(skip)
+        .limit(limit)
+        .populate("userId", "name email"),
+      Comment.countDocuments({ postId: req.params.postId }),
+    ]);
+
+    res.json({
+      data: comments,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (err) {
-    console.error("🔥 Error fetching comments:", err);
-    res.status(500).json({ message: err.message });
+    next(err);
+  }
+});
+
+// ✅ Update comment
+router.put("/:id", authMiddleware, async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+    if (!req.user || comment.userId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ message: "Not authorized to edit this comment" });
+    }
+
+    comment.text = req.body.text || comment.text;
+    await comment.save();
+
+    res.json({ message: "Comment updated successfully", comment });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ✅ Delete comment
+router.delete("/:id", authMiddleware, async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+    if (!req.user || comment.userId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ message: "Not authorized to delete this comment" });
+    }
+
+    await comment.deleteOne();
+    res.json({ message: "Comment deleted successfully" });
+  } catch (err) {
+    next(err);
   }
 });
 
